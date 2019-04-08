@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. 安装程序", "00. 安装程序", "{F2C87F4E-BF5B-4E4A-BFB5-4EF2974E7E66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. 基础信息管理服务", "01. 基础信息管理服务", "{E6A21ABE-0C6F-4709-AF39-B11A0A658E87}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgBaseInfoMgr", "bgBaseInfoMgr\bgBaseInfoMgr.vcproj", "{B22EA314-6574-4C24-889F-82B22F13A0A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B22EA314-6574-4C24-889F-82B22F13A0A9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B22EA314-6574-4C24-889F-82B22F13A0A9}.Debug|Win32.Build.0 = Debug|Win32
+		{B22EA314-6574-4C24-889F-82B22F13A0A9}.Release|Win32.ActiveCfg = Release|Win32
+		{B22EA314-6574-4C24-889F-82B22F13A0A9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B22EA314-6574-4C24-889F-82B22F13A0A9} = {E6A21ABE-0C6F-4709-AF39-B11A0A658E87}
+	EndGlobalSection
+EndGlobal
