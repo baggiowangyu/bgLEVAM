@@ -87,7 +87,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="XCOPY /D /Y $(ProjectDir)config.ini $(OutDir)"
+				CommandLine="XCOPY /Y $(ProjectDir)config.ini $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoCryptod.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoFoundationd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoJSONd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDataMySQLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDatad.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetSSLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoRedisd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoUtild.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoXMLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoZipd.dll $(OutDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -213,6 +213,10 @@
 			</File>
 			<File
 				RelativePath=".\bgHttpServer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\bgMsgHandler.h"
 				>
 			</File>
 		</Filter>

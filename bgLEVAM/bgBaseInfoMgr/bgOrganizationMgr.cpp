@@ -1,5 +1,7 @@
 #include "bgOrganizationMgr.h"
 
+#include <sstream>
+
 bgOrganizationMgr::bgOrganizationMgr()
 {
 
@@ -12,11 +14,15 @@ bgOrganizationMgr::~bgOrganizationMgr()
 
 int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response)
 {
+	int err_code = 0;
+
 	try
 	{
 		std::string uri = request.getURI();
 		std::string method = request.getMethod();
 		//std::string host = request.getHost();
+
+		std::cout<<method.c_str()<<" "<<uri.c_str()<<std::endl;
 
 		// 这里开始判断接口
 		if (uri.compare("/api/v1/BaseInfo/AddOrganization") == 0)
@@ -107,11 +113,13 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 	}
 	catch(Poco::Exception e)
 	{
-		e.code();
+		err_code = e.code();
 		e.displayText();
 		
 		// 写日志
 	}
+
+	return err_code;
 }
 
 int bgOrganizationMgr::InsertOrg()

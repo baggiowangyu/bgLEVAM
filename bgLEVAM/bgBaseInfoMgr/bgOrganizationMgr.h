@@ -13,7 +13,7 @@
 #include "Poco/Net/NetException.h"
 #include "Poco/StreamCopier.h"
 
-#include "bgHttpServer.h"
+#include "bgMsgHandler.h"
 
 class bgOrganizationMgr : public MsgHandler
 {

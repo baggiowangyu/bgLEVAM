@@ -56,7 +56,7 @@ int bgServerApp::main(const std::vector<std::string>& args)
 	try
 	{
 		// 拿IP、端口进行绑定
-		std::string ipaddress = config().getString("SERVICE.IP");
+		std::string ipaddress = config().getString("SERVICE.HOST");
 		unsigned int port = config().getUInt("SERVICE.PORT");
 		Poco::Net::SocketAddress socket_address(ipaddress, port);
 		Poco::Net::ServerSocket server_socket(socket_address);

@@ -12,20 +12,8 @@
 #include "Poco/Net/ServerSocket.h"
 #include "Poco/Net/NetException.h"
 
+#include "bgMsgHandler.h"
 #include "bgOrganizationMgr.h"
-
-//////////////////////////////////////////////////////////////////////////
-//
-// 定义消息处理抽象类
-//
-//////////////////////////////////////////////////////////////////////////
-#define Msghandler_NotSupported	-6002
-class MsgHandler
-{
-public:
-	virtual int handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) = 0;
-};
-
 
 //////////////////////////////////////////////////////////////////////////
 //

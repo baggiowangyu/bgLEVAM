@@ -12,7 +12,8 @@ void bgRequestHandler::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 	std::vector<MsgHandler *>::iterator iter;
 	for (iter = msg_handlers_.begin(); iter != msg_handlers_.end(); ++iter)
 	{
-		err_code = iter->handleRequest(request, response);
+		MsgHandler *handler = *iter;
+		err_code = handler->handleRequest(request, response);
 		if (err_code != Msghandler_NotSupported)
 		{
 			// 说明是此处理对象处理的，跳出
