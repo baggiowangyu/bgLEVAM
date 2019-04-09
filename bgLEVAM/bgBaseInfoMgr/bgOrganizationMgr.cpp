@@ -19,7 +19,7 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 		//std::string host = request.getHost();
 
 		// 这里开始判断接口
-		if (uri.compare("/api/v1/BaseInfo/AddOrg") == 0)
+		if (uri.compare("/api/v1/BaseInfo/AddOrganization") == 0)
 		{
 			// 添加组织架构，只支持POST数据
 			if (method.compare("POST") != 0)
@@ -39,7 +39,7 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 				// 正常来说这里会拿到一个Json，我们解析为Json
 			}
 		}
-		else if (uri.compare("/api/v1/BaseInfo/RemoveOrg") == 0)
+		else if (uri.compare("/api/v1/BaseInfo/RemoveOrganization") == 0)
 		{
 			// 移除组织架构，只支持POST数据
 			if (method.compare("POST") != 0)
@@ -59,7 +59,7 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 				// 正常来说这里会拿到一个Json，我们解析为Json
 			}
 		}
-		else if (uri.compare("/api/v1/BaseInfo/QueryOrg") == 0)
+		else if (uri.compare("/api/v1/BaseInfo/QueryOrganization") == 0)
 		{
 			// 查询组织架构，支持GET数据
 			if (method.compare("GET") != 0)
@@ -79,7 +79,7 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 				// 正常来说这里会拿到一个Json，我们解析为Json
 			}
 		}
-		else if (uri.compare("/api/v1/BaseInfo/ModifyOrg") == 0)
+		else if (uri.compare("/api/v1/BaseInfo/ModifyOrganization") == 0)
 		{
 			// 修改组织架构，只支持POST数据
 			if (method.compare("POST") != 0)

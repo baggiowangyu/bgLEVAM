@@ -233,6 +233,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\基础信息管理服务业务逻辑说明.md"
+			>
+		</File>
+		<File
 			RelativePath=".\基础信息管理服务接口文档.md"
 			>
 		</File>
