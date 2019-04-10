@@ -9,6 +9,8 @@
 #include "Poco/Util/Option.h"
 #include "Poco/Util/OptionSet.h"
 
+#include <sstream>
+
 
 #define MODULE_VERSION	"1.0.0.1"
 
@@ -50,8 +52,11 @@ int bgServerApp::main(const std::vector<std::string>& args)
 {
 	int errCode = Poco::Util::Application::EXIT_OK;
 	std::string errstr;
+	stringstream stream;
 
-	std::cout<<"bgBaseInfoMgr >>> Version : "<<MODULE_VERSION<<std::endl;
+	stream<<"bgBaseInfoMgr >>> Version : "<<MODULE_VERSION;
+	std::cout<<stream.str().c_str()<<std::endl;
+	logger().information(stream.str());
 
 	try
 	{
@@ -61,8 +66,52 @@ int bgServerApp::main(const std::vector<std::string>& args)
 		Poco::Net::SocketAddress socket_address(ipaddress, port);
 		Poco::Net::ServerSocket server_socket(socket_address);
 
+		stream<<"Listen address : "<<ipaddress.c_str()<<":"<<port;
+		std::cout<<stream.str().c_str()<<std::endl;
+		logger().information(stream.str());
+
+		// 初始化数据库
+		int database_type = config().getInt("DATABASE.TYPE");
+		std::string database_host = config().getString("DATABASE.HOST");
+		int database_port = config().getInt("DATABASE.PORT");
+		std::string database_username = config().getString("DATABASE.USER");
+		std::string database_password = config().getString("DATABASE.PASS");
+		std::string database_dbname = config().getString("DATABASE.DBNAME");
+		bgBaseInfoDatabase *database = new bgBaseInfoDatabase();
+		errCode = database->Initialize(database_host.c_str(), database_port, database_username.c_str(), database_password.c_str(), database_dbname.c_str());
+		if (errCode != 0)
+		{
+			std::cout<<"Database connect failed..."<<std::endl;
+		}
+
+		// 初始化缓存
+		int cache_mode = config().getInt("CACHE.MODE");
+		std::string cache_host = config().getString("CACHE.HOST");
+		int cache_port = config().getInt("CACHE.PORT");
+
+		bgBaseInfoCache *cache = new bgBaseInfoCache();
+		errCode = cache->Initialize(cache_mode, cache_host.c_str(), cache_port);
+		if (errCode != 0)
+		{
+			std::cout<<"Database connect failed..."<<std::endl;
+		}
+
+		// 从数据库构建缓存数据
+		std::string database_all_data_json;
+		errCode = database->GetAllData(database_all_data_json);
+		if (errCode != 0)
+		{
+			std::cout<<"Database get all data failed..."<<std::endl;
+		}
+
+		errCode = cache->BuildCache(database_all_data_json);
+		if (errCode != 0)
+		{
+			std::cout<<"Cache build failed..."<<std::endl;
+		}
+
 		// 创建工厂类，加载插件对象给工厂类
-		Poco::SharedPtr<bgRequestHandlerFactory> factory = new bgRequestHandlerFactory;
+		Poco::SharedPtr<bgRequestHandlerFactory> factory = new bgRequestHandlerFactory(database, cache, this);
 
 		Poco::Net::HTTPServer server(factory, server_socket, new Poco::Net::HTTPServerParams);
 		server.start();

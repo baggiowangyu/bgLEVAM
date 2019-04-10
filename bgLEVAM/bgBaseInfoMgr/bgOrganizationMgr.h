@@ -14,6 +14,8 @@
 #include "Poco/StreamCopier.h"
 
 #include "bgMsgHandler.h"
+#include "bgBaseInfoDatabase.h"
+#include "bgBaseInfoCache.h"
 
 class bgOrganizationMgr : public MsgHandler
 {
@@ -26,18 +28,20 @@ public:
 
 private:
 	// 增加组织架构
-	int InsertOrg();
+	int InsertOrg(std::string &json_string, std::string &result_json_string);
 
 	// 删除组织架构
-	int RemoveOrg();
+	int RemoveOrg(std::string &json_string, std::string &result_json_string);
 
 	// 查询组织架构
-	int QueryOrg();
+	int QueryOrg(std::string &json_string, std::string &result_json_string);
 
 	// 修改组织架构
-	int ModifyOrg();
+	int ModifyOrg(std::string &json_string, std::string &result_json_string);
 
 private:
+	bgBaseInfoDatabase *database_;
+	bgBaseInfoCache *cache_;
 };
 
 #endif//_bgOrganizationMgr_H_

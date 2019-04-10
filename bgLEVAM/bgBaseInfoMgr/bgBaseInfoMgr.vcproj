@@ -87,7 +87,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="XCOPY /Y $(ProjectDir)config.ini $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoCryptod.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoFoundationd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoJSONd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDataMySQLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDatad.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetSSLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoRedisd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoUtild.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoXMLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoZipd.dll $(OutDir)"
+				CommandLine="XCOPY /Y $(ProjectDir)config.ini $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoCryptod.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoFoundationd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoJSONd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDataMySQLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoDatad.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoNetSSLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoRedisd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoUtild.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoXMLd.dll $(OutDir)&#x0D;&#x0A;XCOPY /D /Y $(SolutionDir)ext\Poco\bin\PocoZipd.dll $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -223,12 +223,44 @@
 		<Filter
 			Name="03. 业务处理模块"
 			>
+			<Filter
+				Name="01. 组织架构管理"
+				>
+				<File
+					RelativePath=".\bgOrganizationMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\bgOrganizationMgr.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="03. 设备信息管理"
+				>
+			</Filter>
+			<Filter
+				Name="02. 用户信息管理"
+				>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="04. 数据处理模块"
+			>
 			<File
-				RelativePath=".\bgOrganizationMgr.cpp"
+				RelativePath=".\bgBaseInfoCache.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\bgOrganizationMgr.h"
+				RelativePath=".\bgBaseInfoCache.h"
+				>
+			</File>
+			<File
+				RelativePath=".\bgBaseInfoDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\bgBaseInfoDatabase.h"
 				>
 			</File>
 		</Filter>

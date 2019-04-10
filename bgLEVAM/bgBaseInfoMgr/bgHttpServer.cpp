@@ -1,5 +1,12 @@
 #include "bgHttpServer.h"
 
+bgRequestHandler::bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app)
+: database_(database)
+, cache_(cache)
+, app_(app)
+{
+}
+
 void bgRequestHandler::SetMsgHandler(MsgHandler *msg_handler)
 {
 	msg_handlers_.push_back(msg_handler);
@@ -26,9 +33,15 @@ void bgRequestHandler::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 }
 
 
+bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache)
+: database_(database)
+, cache_(cache)
+{
+}
+
 Poco::Net::HTTPRequestHandler*  bgRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest& request)
 {
-	bgRequestHandler *handler = new bgRequestHandler;
+	bgRequestHandler *handler = new bgRequestHandler(database_, cache_);
 
 	// 装载消息处理对象
 	handler->SetMsgHandler(&org_mgr_);

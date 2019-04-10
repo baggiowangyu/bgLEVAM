@@ -23,6 +23,9 @@
 class bgRequestHandler : public Poco::Net::HTTPRequestHandler
 {
 public:
+	bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache);
+
+public:
 	void SetMsgHandler(MsgHandler *msg_handler);
 
 public:
@@ -31,6 +34,9 @@ public:
 
 private:
 	std::vector<MsgHandler *> msg_handlers_;
+
+	bgBaseInfoDatabase *database_;
+	bgBaseInfoCache *cache_;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -41,11 +47,19 @@ private:
 class bgRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory
 {
 public:
+	bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app);
+
+public:
 	virtual Poco::Net::HTTPRequestHandler* createRequestHandler(const Poco::Net::HTTPServerRequest& request);
 
 public:
 	// 处理接口对象
 	bgOrganizationMgr org_mgr_;
+
+private:
+	Poco::Util::Application *app_;
+	bgBaseInfoDatabase *database_;
+	bgBaseInfoCache *cache_;
 };
 
 #endif//_bgHttpServer_H_
