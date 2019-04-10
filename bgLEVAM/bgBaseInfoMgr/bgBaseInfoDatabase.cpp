@@ -59,6 +59,7 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 	int err_code = 0;
 
 	// 这里考虑性能直接入库还是加入缓冲队列，由工作线程进行
+	// 这里不考虑了，此接口应当兼容单条入库和多条入库模式
 
 	return err_code;
 }

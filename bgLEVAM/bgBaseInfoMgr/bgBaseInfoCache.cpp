@@ -49,3 +49,10 @@ int bgBaseInfoCache::ModifyOrg(std::string &json_string, std::string &result_jso
 
 	return err_code;
 }
+
+int bgBaseInfoCache::BuildCache(std::string &all_data)
+{
+	int err_code = 0;
+
+	return err_code;
+}

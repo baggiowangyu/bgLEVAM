@@ -52,8 +52,9 @@ int bgServerApp::main(const std::vector<std::string>& args)
 {
 	int errCode = Poco::Util::Application::EXIT_OK;
 	std::string errstr;
-	stringstream stream;
+	std::stringstream stream;
 
+	stream.str("");
 	stream<<"bgBaseInfoMgr >>> Version : "<<MODULE_VERSION;
 	std::cout<<stream.str().c_str()<<std::endl;
 	logger().information(stream.str());
@@ -66,6 +67,7 @@ int bgServerApp::main(const std::vector<std::string>& args)
 		Poco::Net::SocketAddress socket_address(ipaddress, port);
 		Poco::Net::ServerSocket server_socket(socket_address);
 
+		stream.str("");
 		stream<<"Listen address : "<<ipaddress.c_str()<<":"<<port;
 		std::cout<<stream.str().c_str()<<std::endl;
 		logger().information(stream.str());

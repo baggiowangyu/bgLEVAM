@@ -33,15 +33,16 @@ void bgRequestHandler::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 }
 
 
-bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache)
+bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app)
 : database_(database)
 , cache_(cache)
+, app_(app)
 {
 }
 
 Poco::Net::HTTPRequestHandler*  bgRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest& request)
 {
-	bgRequestHandler *handler = new bgRequestHandler(database_, cache_);
+	bgRequestHandler *handler = new bgRequestHandler(database_, cache_, app_);
 
 	// 装载消息处理对象
 	handler->SetMsgHandler(&org_mgr_);

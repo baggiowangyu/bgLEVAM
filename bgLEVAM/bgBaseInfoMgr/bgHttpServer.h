@@ -11,6 +11,7 @@
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Net/ServerSocket.h"
 #include "Poco/Net/NetException.h"
+#include "Poco/Util/Application.h"
 
 #include "bgMsgHandler.h"
 #include "bgOrganizationMgr.h"
@@ -23,7 +24,7 @@
 class bgRequestHandler : public Poco::Net::HTTPRequestHandler
 {
 public:
-	bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache);
+	bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app);
 
 public:
 	void SetMsgHandler(MsgHandler *msg_handler);
@@ -35,6 +36,7 @@ public:
 private:
 	std::vector<MsgHandler *> msg_handlers_;
 
+	Poco::Util::Application *app_;
 	bgBaseInfoDatabase *database_;
 	bgBaseInfoCache *cache_;
 };
