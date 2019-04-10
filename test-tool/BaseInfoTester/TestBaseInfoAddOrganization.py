@@ -15,19 +15,19 @@ REST_PORT = 6001
 def add_organization():
 
     org_info = list()
-    org_count = 100
-    for index in range(1, org_count):
+    org_count = 1
+    for index in range(0, org_count):
         org = dict()
         org["org_name"] = "测试部门%d" % index
-        org["org_code"] = ""
-        org["org_parent"] = ""
-        org["org_path"] = ""
-        org["source"] = ""
-        org["order_no"] = ""
-        org["create_time"] = ""
-        org["update_time"] = ""
-        org["duty_range"] = ""
-        org["extend"] = ""
+        org["org_code"] = "44012200"
+        org["org_parent"] = "44012200"
+        org["org_path"] = "44012200"
+        org["source"] = "1"
+        org["order_no"] = 0
+        org["create_time"] = "2019-04-11 01:11:01"
+        org["update_time"] = "2019-04-11 01:11:01"
+        org["duty_range"] = "none"
+        org["extend"] = "none"
         org_info.append(org)
 
     url_string = "http://%s:%d/api/v1/BaseInfo/AddOrganization" % (REST_HOST, REST_PORT)
@@ -37,3 +37,7 @@ def add_organization():
     post_header["Accept"] = "application/json"
 
     response = requests.post(url=url_string, data=json.dumps(org_info), headers=post_header)
+
+
+
+add_organization()
