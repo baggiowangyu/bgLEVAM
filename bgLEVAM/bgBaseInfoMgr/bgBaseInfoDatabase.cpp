@@ -104,7 +104,14 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 			std::string org_code = element->get("extend");
 
 			// 这里按照规则创建一个rid
-			// 规则GMO + 8位区位码 + 年月日时分秒 + 
+			// 规则GMO + 8位区位码 + 年月日时分秒 + 一个随机数
+			std::string area_code = "44010000";
+			Poco::DateTime datetime;
+			char rid[4096] = {0};
+			sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%s", area_code.c_str(),
+				datetime.year(), datetime.month(), datetime.day(), datetime.hour(), datetime.minute(), datetime.second(),
+				)
+			
 		}
 		
 	}
