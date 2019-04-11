@@ -55,7 +55,7 @@ int bgServerApp::main(const std::vector<std::string>& args)
 	std::stringstream stream;
 
 	stream.str("");
-	stream<<"bgBaseInfoMgr >>> Version : "<<MODULE_VERSION;
+	stream<<"bgBaseInfoMgr Started..."<<std::endl<<"Version : "<<MODULE_VERSION;
 	std::cout<<stream.str().c_str()<<std::endl;
 	logger().information(stream.str());
 
