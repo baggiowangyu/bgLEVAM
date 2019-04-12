@@ -9,6 +9,9 @@
 #include "Poco/Util/Application.h"
 #include "Poco/Util/ServerApplication.h"
 
+#include "bgBaseInfoDatabase.h"
+#include "bgBaseInfoCache.h"
+
 class bgServerApp : public Poco::Util::ServerApplication
 {
 public:
@@ -18,6 +21,10 @@ public:
 public:
 	// Èë¿Úº¯Êý
 	int main(const std::vector<std::string>& args);
+
+public:
+	bgBaseInfoDatabase *database_;
+	bgBaseInfoCache *cache_;
 };
 
 #endif//_bgServerApp_H_

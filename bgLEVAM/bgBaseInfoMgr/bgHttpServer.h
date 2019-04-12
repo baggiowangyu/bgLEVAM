@@ -15,6 +15,8 @@
 
 #include "bgMsgHandler.h"
 #include "bgOrganizationMgr.h"
+#include "bgBaseInfoDatabase.h"
+#include "bgBaseInfoCache.h"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -24,7 +26,7 @@
 class bgRequestHandler : public Poco::Net::HTTPRequestHandler
 {
 public:
-	bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app);
+	bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, bgServerApp *app);
 
 public:
 	void SetMsgHandler(MsgHandler *msg_handler);
@@ -36,7 +38,7 @@ public:
 private:
 	std::vector<MsgHandler *> msg_handlers_;
 
-	Poco::Util::Application *app_;
+	bgServerApp *app_;
 	bgBaseInfoDatabase *database_;
 	bgBaseInfoCache *cache_;
 };
@@ -49,7 +51,7 @@ private:
 class bgRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory
 {
 public:
-	bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app);
+	bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, bgServerApp *app);
 
 public:
 	virtual Poco::Net::HTTPRequestHandler* createRequestHandler(const Poco::Net::HTTPServerRequest& request);
@@ -59,7 +61,7 @@ public:
 	bgOrganizationMgr *org_mgr_;
 
 private:
-	Poco::Util::Application *app_;
+	bgServerApp *app_;
 	bgBaseInfoDatabase *database_;
 	bgBaseInfoCache *cache_;
 };

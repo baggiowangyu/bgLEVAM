@@ -79,8 +79,8 @@ int bgServerApp::main(const std::vector<std::string>& args)
 		std::string database_username = config().getString("DATABASE.USER");
 		std::string database_password = config().getString("DATABASE.PASS");
 		std::string database_dbname = config().getString("DATABASE.DBNAME");
-		bgBaseInfoDatabase *database = new bgBaseInfoDatabase();
-		errCode = database->Initialize(database_host.c_str(), database_port, database_username.c_str(), database_password.c_str(), database_dbname.c_str());
+		database_ = new bgBaseInfoDatabase();
+		errCode = database_->Initialize(database_host.c_str(), database_port, database_username.c_str(), database_password.c_str(), database_dbname.c_str());
 		if (errCode != 0)
 		{
 			std::cout<<"Database connect failed..."<<std::endl;
@@ -91,8 +91,8 @@ int bgServerApp::main(const std::vector<std::string>& args)
 		std::string cache_host = config().getString("CACHE.HOST");
 		int cache_port = config().getInt("CACHE.PORT");
 
-		bgBaseInfoCache *cache = new bgBaseInfoCache();
-		errCode = cache->Initialize(cache_mode, cache_host.c_str(), cache_port);
+		cache_ = new bgBaseInfoCache();
+		errCode = cache_->Initialize(cache_mode, cache_host.c_str(), cache_port);
 		if (errCode != 0)
 		{
 			std::cout<<"Database connect failed..."<<std::endl;
@@ -100,20 +100,20 @@ int bgServerApp::main(const std::vector<std::string>& args)
 
 		// 从数据库构建缓存数据
 		std::string database_all_data_json;
-		errCode = database->GetAllData(database_all_data_json);
+		errCode = database_->GetAllData(database_all_data_json);
 		if (errCode != 0)
 		{
 			std::cout<<"Database get all data failed..."<<std::endl;
 		}
 
-		errCode = cache->BuildCache(database_all_data_json);
+		errCode = cache_->BuildCache(database_all_data_json);
 		if (errCode != 0)
 		{
 			std::cout<<"Cache build failed..."<<std::endl;
 		}
 
 		// 创建工厂类，加载插件对象给工厂类
-		Poco::SharedPtr<bgRequestHandlerFactory> factory = new bgRequestHandlerFactory(database, cache, this);
+		Poco::SharedPtr<bgRequestHandlerFactory> factory = new bgRequestHandlerFactory(database_, cache_, this);
 
 		Poco::Net::HTTPServer server(factory, server_socket, new Poco::Net::HTTPServerParams);
 		server.start();

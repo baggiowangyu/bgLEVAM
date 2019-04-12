@@ -33,7 +33,7 @@ public:
 
 private:
 	std::string connection_string_;
-	Poco::SharedPtr<Poco::Data::Session> session_;
+	Poco::Data::Session *session_;
 };
 
 #endif//_bgBaseInfoDatabase_H_

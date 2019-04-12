@@ -1,6 +1,6 @@
 #include "bgHttpServer.h"
 
-bgRequestHandler::bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app)
+bgRequestHandler::bgRequestHandler(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, bgServerApp *app)
 : database_(database)
 , cache_(cache)
 , app_(app)
@@ -20,7 +20,7 @@ void bgRequestHandler::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 	for (iter = msg_handlers_.begin(); iter != msg_handlers_.end(); ++iter)
 	{
 		MsgHandler *handler = *iter;
-		err_code = handler->handleRequest(request, response);
+		err_code = handler->handleRequest(request, response, app_);
 		if (err_code != Msghandler_NotSupported)
 		{
 			// 说明是此处理对象处理的，跳出
@@ -33,11 +33,11 @@ void bgRequestHandler::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 }
 
 
-bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, Poco::Util::Application *app)
+bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, bgBaseInfoCache *cache, bgServerApp *app)
 : database_(database)
 , cache_(cache)
 , app_(app)
-, org_mgr_(new bgOrganizationMgr(database_, cache_))
+, org_mgr_(new bgOrganizationMgr())
 {
 }
 

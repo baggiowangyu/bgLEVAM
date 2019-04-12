@@ -14,34 +14,30 @@
 #include "Poco/StreamCopier.h"
 
 #include "bgMsgHandler.h"
-#include "bgBaseInfoDatabase.h"
-#include "bgBaseInfoCache.h"
+
 
 class bgOrganizationMgr : public MsgHandler
 {
 public:
-	bgOrganizationMgr(bgBaseInfoDatabase *database, bgBaseInfoCache *cache);
+	bgOrganizationMgr();
 	~bgOrganizationMgr();
 
 public:
-	virtual int handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response);
+	virtual int handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response, bgServerApp *app);
 
 private:
 	// 增加组织架构
-	int InsertOrg(std::string &json_string, std::string &result_json_string);
+	int InsertOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app);
 
 	// 删除组织架构
-	int RemoveOrg(std::string &json_string, std::string &result_json_string);
+	int RemoveOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app);
 
 	// 查询组织架构
-	int QueryOrg(std::string &json_string, std::string &result_json_string);
+	int QueryOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app);
 
 	// 修改组织架构
-	int ModifyOrg(std::string &json_string, std::string &result_json_string);
+	int ModifyOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app);
 
-private:
-	bgBaseInfoDatabase *database_;
-	bgBaseInfoCache *cache_;
 };
 
 #endif//_bgOrganizationMgr_H_

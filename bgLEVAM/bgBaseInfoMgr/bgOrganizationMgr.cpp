@@ -2,9 +2,7 @@
 
 #include <sstream>
 
-bgOrganizationMgr::bgOrganizationMgr(bgBaseInfoDatabase *database, bgBaseInfoCache *cache)
-: database_(database)
-, cache_(cache)
+bgOrganizationMgr::bgOrganizationMgr()
 {
 
 }
@@ -14,7 +12,7 @@ bgOrganizationMgr::~bgOrganizationMgr()
 
 }
 
-int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response)
+int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response, bgServerApp *app)
 {
 	int err_code = 0;
 
@@ -46,7 +44,7 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 
 				// 正常来说这里会拿到一个Json，我们解析为Json
 				std::string result_json_string;
-				err_code = this->InsertOrg(request_body, result_json_string);
+				err_code = this->InsertOrg(request_body, result_json_string, app);
 
 				if (err_code != 0)
 				{
@@ -135,22 +133,22 @@ int bgOrganizationMgr::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
 	return err_code;
 }
 
-int bgOrganizationMgr::InsertOrg(std::string &json_string, std::string &result_json_string)
+int bgOrganizationMgr::InsertOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app)
 {
 	int err_code = 0;
 
 	// 首先扔给数据库
-	if (database_ == NULL)
+	if (app->database_ == NULL)
 		return -1;
 
-	err_code = database_->AddOrg(json_string, result_json_string);
+	err_code = app->database_->AddOrg(json_string, result_json_string);
 	if (err_code != 0)
 	{
 		// 数据库处理失败
 	}
 
 	// 添加到缓存中
-	err_code = cache_->AddOrg(json_string, result_json_string);
+	err_code = app->cache_->AddOrg(json_string, result_json_string);
 	if (err_code != 0)
 	{
 		// 缓存处理失败
@@ -159,21 +157,21 @@ int bgOrganizationMgr::InsertOrg(std::string &json_string, std::string &result_j
 	return err_code;
 }
 
-int bgOrganizationMgr::RemoveOrg(std::string &json_string, std::string &result_json_string)
+int bgOrganizationMgr::RemoveOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app)
 {
 	int err_code = 0;
 
 	return err_code;
 }
 
-int bgOrganizationMgr::QueryOrg(std::string &json_string, std::string &result_json_string)
+int bgOrganizationMgr::QueryOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app)
 {
 	int err_code = 0;
 
 	return err_code;
 }
 
-int bgOrganizationMgr::ModifyOrg(std::string &json_string, std::string &result_json_string)
+int bgOrganizationMgr::ModifyOrg(std::string &json_string, std::string &result_json_string, bgServerApp *app)
 {
 	int err_code = 0;
 

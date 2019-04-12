@@ -11,6 +11,9 @@
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Net/ServerSocket.h"
 #include "Poco/Net/NetException.h"
+#include "Poco/Util/Application.h"
+
+#include "bgServerApp.h"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -22,7 +25,7 @@
 class MsgHandler
 {
 public:
-	virtual int handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) = 0;
+	virtual int handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response, bgServerApp *app) = 0;
 };
 
 #endif//_MsgHandler_H_
