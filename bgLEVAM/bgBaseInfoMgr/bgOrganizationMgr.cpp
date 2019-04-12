@@ -2,7 +2,9 @@
 
 #include <sstream>
 
-bgOrganizationMgr::bgOrganizationMgr()
+bgOrganizationMgr::bgOrganizationMgr(bgBaseInfoDatabase *database, bgBaseInfoCache *cache)
+: database_(database)
+, cache_(cache)
 {
 
 }

@@ -20,7 +20,7 @@
 class bgOrganizationMgr : public MsgHandler
 {
 public:
-	bgOrganizationMgr();
+	bgOrganizationMgr(bgBaseInfoDatabase *database, bgBaseInfoCache *cache);
 	~bgOrganizationMgr();
 
 public:

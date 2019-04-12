@@ -37,6 +37,7 @@ bgRequestHandlerFactory::bgRequestHandlerFactory(bgBaseInfoDatabase *database, b
 : database_(database)
 , cache_(cache)
 , app_(app)
+, org_mgr_(new bgOrganizationMgr(database_, cache_))
 {
 }
 
@@ -45,7 +46,7 @@ Poco::Net::HTTPRequestHandler*  bgRequestHandlerFactory::createRequestHandler(co
 	bgRequestHandler *handler = new bgRequestHandler(database_, cache_, app_);
 
 	// 装载消息处理对象
-	handler->SetMsgHandler(&org_mgr_);
+	handler->SetMsgHandler(org_mgr_);
 
 	return handler;
 }

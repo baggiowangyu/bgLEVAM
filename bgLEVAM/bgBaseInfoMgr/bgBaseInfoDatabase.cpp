@@ -3,6 +3,7 @@
 #include "Poco/JSON/Parser.h"
 #include "Poco/Dynamic/Var.h"
 #include "Poco/JSON/Array.h"
+#include "Poco/RandomStream.h"
 
 bgBaseInfoDatabase::bgBaseInfoDatabase()
 : session_(NULL)
@@ -62,6 +63,8 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 {
 	int err_code = 0;
 
+	Poco::Data::Statement stat(*session_);
+
 	// 这里考虑性能直接入库还是加入缓冲队列，由工作线程进行
 	// 这里不考虑了，此接口应当兼容单条入库和多条入库模式
 	Poco::JSON::Parser parser;
@@ -83,6 +86,19 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 		return -1;
 	}
 
+	std::vector<std::string> org_rids;
+	std::vector<std::string> org_names;
+	std::vector<std::string> org_codes;
+	std::vector<std::string> org_parents;
+	std::vector<std::string> org_paths;
+	std::vector<std::string> sources;
+	std::vector<int> order_nos;
+	std::vector<std::string> create_times;
+	std::vector<std::string> update_times;
+	std::vector<std::string> duty_ranges;
+	std::vector<std::string> extends;
+	std::string sql = "INSERT INTO bg_baseinfo_organization(org_rid, org_name, org_code, org_parent, org_path, source, create_time, update_time, state, order_no, duty_range, extend) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 	Poco::JSON::Array::Ptr object_array = result.extract<Poco::JSON::Array::Ptr>();
 	int object_array_count = object_array->size();
 
@@ -91,30 +107,77 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 	{
 		if (iter->type() == typeid(Poco::JSON::Object::Ptr))
 		{
-			Poco::JSON::Object::Ptr element = iter->extract<Poco::JSON::Object::Ptr>();
-			std::string org_code = element->get("org_name");
-			std::string org_code = element->get("org_code");
-			std::string org_code = element->get("org_parent");
-			std::string org_code = element->get("org_path");
-			std::string org_code = element->get("source");
-			std::string org_code = element->get("order_no");
-			std::string org_code = element->get("create_time");
-			std::string org_code = element->get("update_time");
-			std::string org_code = element->get("duty_range");
-			std::string org_code = element->get("extend");
-
 			// 这里按照规则创建一个rid
 			// 规则GMO + 8位区位码 + 年月日时分秒 + 一个随机数
+			std::string random_string;
+
+			Poco::RandomInputStream rnd;
+			rnd>>random_string;
+
 			std::string area_code = "44010000";
+
 			Poco::DateTime datetime;
 			char rid[4096] = {0};
 			sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%s", area_code.c_str(),
 				datetime.year(), datetime.month(), datetime.day(), datetime.hour(), datetime.minute(), datetime.second(),
-				)
-			
+				random_string.c_str());
+
+			Poco::JSON::Object::Ptr element = iter->extract<Poco::JSON::Object::Ptr>();
+			std::string org_name	= element->get("org_name").toString();
+			std::string org_code	= element->get("org_code").toString();
+			std::string org_parent	= element->get("org_parent").toString();
+			std::string org_path	= element->get("org_path").toString();
+			std::string source		= element->get("source").toString();
+			int order_no			= element->get("order_no").convert<int>();
+			std::string create_time = element->get("create_time").toString();
+			std::string update_time = element->get("update_time").toString();
+			std::string duty_range	= element->get("duty_range").toString();
+			std::string extend		= element->get("extend").toString();
+
+			stat<<sql.c_str(), 
+				Poco::Data::Keywords::use(rid), 
+				Poco::Data::Keywords::use(org_name), 
+				Poco::Data::Keywords::use(org_code),
+				Poco::Data::Keywords::use(org_parent), 
+				Poco::Data::Keywords::use(org_path), 
+				Poco::Data::Keywords::use(source), 
+				Poco::Data::Keywords::use(order_no),
+				Poco::Data::Keywords::use(create_time), 
+				Poco::Data::Keywords::use(update_time), 
+				Poco::Data::Keywords::use(duty_range), 
+				Poco::Data::Keywords::use(extend);
+
+			//org_rids.push_back(rid);
+			//org_names.push_back(rid);
+			//org_codes.push_back(rid);
+			//org_parents.push_back(rid);
+			//org_paths.push_back(rid);
+			//sources.push_back(rid);
+			//order_nos.push_back(rid);
+			//create_times.push_back(rid);
+			//update_times.push_back(rid);
+			//duty_ranges.push_back(rid);
+			//extends.push_back(rid);
 		}
 		
 	}
+
+	
+	//stat<<sql.c_str(), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids),
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids),
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::use(org_rids), 
+	//	Poco::Data::Keywords::now;
+
+	std::size_t affect_rows = stat.execute();
 
 	return err_code;
 }

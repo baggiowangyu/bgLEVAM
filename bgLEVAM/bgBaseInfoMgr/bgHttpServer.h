@@ -56,7 +56,7 @@ public:
 
 public:
 	// 处理接口对象
-	bgOrganizationMgr org_mgr_;
+	bgOrganizationMgr *org_mgr_;
 
 private:
 	Poco::Util::Application *app_;
