@@ -92,92 +92,116 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 	std::vector<std::string> org_parents;
 	std::vector<std::string> org_paths;
 	std::vector<std::string> sources;
-	std::vector<int> order_nos;
 	std::vector<std::string> create_times;
 	std::vector<std::string> update_times;
+	std::vector<int> states;
+	std::vector<int> order_nos;
 	std::vector<std::string> duty_ranges;
 	std::vector<std::string> extends;
-	std::string sql = "INSERT INTO bg_baseinfo_organization(org_rid, org_name, org_code, org_parent, org_path, source, create_time, update_time, state, order_no, duty_range, extend) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	std::string sql = "INSERT "
+		"INTO bg_baseinfo_organization(org_rid, org_name, org_code, org_parent, org_path, source, create_time, update_time, state, order_no, duty_range, extend) "
+		"VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-	Poco::JSON::Array::Ptr object_array = result.extract<Poco::JSON::Array::Ptr>();
-	int object_array_count = object_array->size();
-
-	Poco::JSON::Array::ConstIterator iter;
-	for (iter = object_array->begin(); iter != object_array->end(); ++iter)
+	try
 	{
-		if (iter->type() == typeid(Poco::JSON::Object::Ptr))
+		Poco::JSON::Array::Ptr object_array = result.extract<Poco::JSON::Array::Ptr>();
+		int object_array_count = object_array->size();
+
+		Poco::JSON::Array::ConstIterator iter;
+		for (iter = object_array->begin(); iter != object_array->end(); ++iter)
 		{
-			// 这里按照规则创建一个rid
-			// 规则GMO + 8位区位码 + 年月日时分秒 + 一个随机数
-			std::string random_string;
+			if (iter->type() == typeid(Poco::JSON::Object::Ptr))
+			{
+				// 这里按照规则创建一个rid
+				// 规则GMO + 8位区位码 + 年月日时分秒 + 一个随机数
+				std::string random_string;
+				Poco::RandomInputStream rnd;
+				rnd>>random_string;
 
-			Poco::RandomInputStream rnd;
-			rnd>>random_string;
+				std::string area_code = "44010000";
 
-			std::string area_code = "44010000";
+				Poco::DateTime datetime;
+				char rid[4096] = {0};
+				sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%02x", area_code.c_str(),
+					datetime.year(), datetime.month(), datetime.day(), datetime.hour(), datetime.minute(), datetime.second(),
+					random_string.c_str());
 
-			Poco::DateTime datetime;
-			char rid[4096] = {0};
-			sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%s", area_code.c_str(),
-				datetime.year(), datetime.month(), datetime.day(), datetime.hour(), datetime.minute(), datetime.second(),
-				random_string.c_str());
+				Poco::JSON::Object::Ptr element = iter->extract<Poco::JSON::Object::Ptr>();
+				std::string org_name	= element->get("org_name").toString();
+				std::string org_code	= element->get("org_code").toString();
+				std::string org_parent	= element->get("org_parent").toString();
+				std::string org_path	= element->get("org_path").toString();
+				std::string source		= element->get("source").toString();
+				std::string create_time = element->get("create_time").toString();
+				std::string update_time = element->get("update_time").toString();
+				int state				= element->get("state").convert<int>();
+				int order_no			= element->get("order_no").convert<int>();
+				std::string duty_range	= element->get("duty_range").toString();
+				std::string extend		= element->get("extend").toString();
 
-			Poco::JSON::Object::Ptr element = iter->extract<Poco::JSON::Object::Ptr>();
-			std::string org_name	= element->get("org_name").toString();
-			std::string org_code	= element->get("org_code").toString();
-			std::string org_parent	= element->get("org_parent").toString();
-			std::string org_path	= element->get("org_path").toString();
-			std::string source		= element->get("source").toString();
-			int order_no			= element->get("order_no").convert<int>();
-			std::string create_time = element->get("create_time").toString();
-			std::string update_time = element->get("update_time").toString();
-			std::string duty_range	= element->get("duty_range").toString();
-			std::string extend		= element->get("extend").toString();
+				stat<<sql.c_str(), 
+					Poco::Data::Keywords::use(rid), 
+					Poco::Data::Keywords::use(org_name), 
+					Poco::Data::Keywords::use(org_code),
+					Poco::Data::Keywords::use(org_parent), 
+					Poco::Data::Keywords::use(org_path), 
+					Poco::Data::Keywords::use(source), 
+					Poco::Data::Keywords::use(create_time), 
+					Poco::Data::Keywords::use(update_time), 
+					Poco::Data::Keywords::use(state),
+					Poco::Data::Keywords::use(order_no),
+					Poco::Data::Keywords::use(duty_range), 
+					Poco::Data::Keywords::use(extend);
 
-			stat<<sql.c_str(), 
-				Poco::Data::Keywords::use(rid), 
-				Poco::Data::Keywords::use(org_name), 
-				Poco::Data::Keywords::use(org_code),
-				Poco::Data::Keywords::use(org_parent), 
-				Poco::Data::Keywords::use(org_path), 
-				Poco::Data::Keywords::use(source), 
-				Poco::Data::Keywords::use(order_no),
-				Poco::Data::Keywords::use(create_time), 
-				Poco::Data::Keywords::use(update_time), 
-				Poco::Data::Keywords::use(duty_range), 
-				Poco::Data::Keywords::use(extend);
+				org_rids.push_back(rid);
+				org_names.push_back(org_name);
+				org_codes.push_back(org_code);
+				org_parents.push_back(org_parent);
+				org_paths.push_back(org_path);
+				sources.push_back(source);
+				create_times.push_back(create_time);
+				update_times.push_back(update_time);
+				states.push_back(state);
+				order_nos.push_back(order_no);
+				duty_ranges.push_back(duty_range);
+				extends.push_back(extend);
+			}
 
-			//org_rids.push_back(rid);
-			//org_names.push_back(rid);
-			//org_codes.push_back(rid);
-			//org_parents.push_back(rid);
-			//org_paths.push_back(rid);
-			//sources.push_back(rid);
-			//order_nos.push_back(rid);
-			//create_times.push_back(rid);
-			//update_times.push_back(rid);
-			//duty_ranges.push_back(rid);
-			//extends.push_back(rid);
 		}
-		
+
+		std::size_t affect_rows = stat.execute();
+		if (affect_rows == object_array_count)
+		{
+			Poco::JSON::Array org_array;
+			for (int index = 0; index < org_rids.size(); ++index)
+			{
+				Poco::JSON::Object org_info;
+				org_info.set("org_rid", org_rids[index]);
+				org_info.set("org_name", org_names[index]);
+				org_info.set("org_code", org_codes[index]);
+				org_info.set("org_parent", org_parents[index]);
+				org_info.set("org_path", org_paths[index]);
+				org_info.set("source", sources[index]);
+				org_info.set("create_time", create_times[index]);
+				org_info.set("update_time", update_times[index]);
+				org_info.set("state", states[index]);
+				org_info.set("order_no", order_nos[index]);
+				org_info.set("duty_range", duty_ranges[index]);
+				org_info.set("extend", extends[index]);
+
+				//Poco::Dynamic::Var org_info_var(org_info);
+				org_array.add(org_info);
+			}
+
+			Poco::Dynamic::Var org_array_var(org_array);
+			result_json_string = org_array_var.toString();
+		}
 	}
-
-	
-	//stat<<sql.c_str(), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids),
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids),
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::use(org_rids), 
-	//	Poco::Data::Keywords::now;
-
-	std::size_t affect_rows = stat.execute();
+	catch(Poco::JSON::JSONException &e)
+	{
+		e.code();
+		e.displayText();
+	}
 
 	return err_code;
 }

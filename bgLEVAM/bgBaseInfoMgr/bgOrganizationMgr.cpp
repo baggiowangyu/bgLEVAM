@@ -141,14 +141,15 @@ int bgOrganizationMgr::InsertOrg(std::string &json_string, std::string &result_j
 	if (app->database_ == NULL)
 		return -1;
 
-	err_code = app->database_->AddOrg(json_string, result_json_string);
+	std::string mysql_result_json;
+	err_code = app->database_->AddOrg(json_string, mysql_result_json);
 	if (err_code != 0)
 	{
 		// 数据库处理失败
 	}
 
 	// 添加到缓存中
-	err_code = app->cache_->AddOrg(json_string, result_json_string);
+	err_code = app->cache_->AddOrg(mysql_result_json, result_json_string);
 	if (err_code != 0)
 	{
 		// 缓存处理失败

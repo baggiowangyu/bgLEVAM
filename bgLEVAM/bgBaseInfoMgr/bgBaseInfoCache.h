@@ -2,6 +2,7 @@
 #define _bgBaseInfoCache_H_
 
 #include <string>
+#include "Poco/Redis/Client.h"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -41,6 +42,9 @@ private:
 	// ÄÚ´æ»º´æ¼¯ºÏ
 	//
 	//////////////////////////////////////////////////////////////////////////
+
+private:
+	Poco::Redis::Client *redis_client_;
 };
 
 #endif//_bgBaseInfoCache_H_
