@@ -23,7 +23,7 @@ def add_organization():
         datetime = int(time.mktime(time.strptime(current_time, "%Y-%m-%d %H:%M:%S")))
 
         org = dict()
-        org["org_name"] = "测试部门%d" % datetime
+        org["org_name"] = "测试部门%d" % index
         org["org_code"] = "44012200"
         org["org_parent"] = "44012200"
         org["org_path"] = "44012200"

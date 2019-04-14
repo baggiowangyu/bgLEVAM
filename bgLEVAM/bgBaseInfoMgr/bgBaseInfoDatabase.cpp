@@ -107,6 +107,7 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 		Poco::JSON::Array::Ptr object_array = result.extract<Poco::JSON::Array::Ptr>();
 		int object_array_count = object_array->size();
 
+		int index = 0;
 		Poco::JSON::Array::ConstIterator iter;
 		for (iter = object_array->begin(); iter != object_array->end(); ++iter)
 		{
@@ -122,9 +123,9 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 
 				Poco::DateTime datetime;
 				char rid[4096] = {0};
-				sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%02x", area_code.c_str(),
+				sprintf(rid, "GMO%s%04d%02d%02d%02d%02d%02d%08d", area_code.c_str(),
 					datetime.year(), datetime.month(), datetime.day(), datetime.hour(), datetime.minute(), datetime.second(),
-					random_string.c_str());
+					index);
 
 				Poco::JSON::Object::Ptr element = iter->extract<Poco::JSON::Object::Ptr>();
 				std::string org_name	= element->get("org_name").toString();
@@ -139,20 +140,6 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 				std::string duty_range	= element->get("duty_range").toString();
 				std::string extend		= element->get("extend").toString();
 
-				stat<<sql.c_str(), 
-					Poco::Data::Keywords::use(rid), 
-					Poco::Data::Keywords::use(org_name), 
-					Poco::Data::Keywords::use(org_code),
-					Poco::Data::Keywords::use(org_parent), 
-					Poco::Data::Keywords::use(org_path), 
-					Poco::Data::Keywords::use(source), 
-					Poco::Data::Keywords::use(create_time), 
-					Poco::Data::Keywords::use(update_time), 
-					Poco::Data::Keywords::use(state),
-					Poco::Data::Keywords::use(order_no),
-					Poco::Data::Keywords::use(duty_range), 
-					Poco::Data::Keywords::use(extend);
-
 				org_rids.push_back(rid);
 				org_names.push_back(org_name);
 				org_codes.push_back(org_code);
@@ -165,12 +152,28 @@ int bgBaseInfoDatabase::AddOrg(std::string &json_string, std::string &result_jso
 				order_nos.push_back(order_no);
 				duty_ranges.push_back(duty_range);
 				extends.push_back(extend);
+
+				++index;
 			}
 
 		}
 
+		stat<<sql.c_str(), 
+			Poco::Data::Keywords::use(org_rids), 
+			Poco::Data::Keywords::use(org_names), 
+			Poco::Data::Keywords::use(org_codes),
+			Poco::Data::Keywords::use(org_parents), 
+			Poco::Data::Keywords::use(org_paths), 
+			Poco::Data::Keywords::use(sources), 
+			Poco::Data::Keywords::use(create_times), 
+			Poco::Data::Keywords::use(update_times), 
+			Poco::Data::Keywords::use(states),
+			Poco::Data::Keywords::use(order_nos),
+			Poco::Data::Keywords::use(duty_ranges), 
+			Poco::Data::Keywords::use(extends);
+
 		std::size_t affect_rows = stat.execute();
-		if (affect_rows == object_array_count)
+		if (affect_rows == 1)
 		{
 			Poco::JSON::Array org_array;
 			for (int index = 0; index < org_rids.size(); ++index)
